@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import Header from "./Header";
 
-const Login = () => {
-  const handleLogin = (e) => {
+const Signup = () => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    // TODO: Add Firebase login logic
-    console.log("Login form submitted");
+    // TODO: Add Firebase signup logic
+    console.log("Signup form submitted");
   };
 
   return (
@@ -22,13 +22,21 @@ const Login = () => {
         <div className="absolute inset-0 bg-black bg-opacity-50" />
       </div>
 
-      {/* Login Form */}
+      {/* Signup Form */}
       <div className="relative flex items-center justify-center min-h-screen">
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleSignup}
           className="w-full max-w-md mx-4 p-12 bg-black bg-opacity-75 rounded-md"
         >
-          <h1 className="text-white font-bold text-3xl mb-6">Sign In</h1>
+          <h1 className="text-white font-bold text-3xl mb-6">Sign Up</h1>
+
+          {/* Full Name Input */}
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full p-4 my-2 bg-gray-700 text-white rounded-md outline-none focus:bg-gray-600"
+            required
+          />
 
           {/* Email Input */}
           <input
@@ -44,6 +52,16 @@ const Login = () => {
             placeholder="Password"
             className="w-full p-4 my-2 bg-gray-700 text-white rounded-md outline-none focus:bg-gray-600"
             required
+            minLength={6}
+          />
+
+          {/* Confirm Password Input */}
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className="w-full p-4 my-2 bg-gray-700 text-white rounded-md outline-none focus:bg-gray-600"
+            required
+            minLength={6}
           />
 
           {/* Error Message Placeholder */}
@@ -51,34 +69,36 @@ const Login = () => {
             {/* Error messages will appear here */}
           </p>
 
-          {/* Sign In Button */}
+          {/* Sign Up Button */}
           <button
             type="submit"
             className="w-full p-4 my-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md transition-colors"
           >
-            Sign In
+            Sign Up
           </button>
 
-          {/* Remember Me & Help */}
-          <div className="flex justify-between items-center text-sm text-gray-400 mb-4">
-            <label className="flex items-center cursor-pointer">
-              <input type="checkbox" className="mr-2" />
-              Remember me
-            </label>
-            <a href="#" className="hover:underline">
-              Need help?
+          {/* Terms & Conditions */}
+          <p className="text-xs text-gray-400 mb-4">
+            By signing up, you agree to our{" "}
+            <a href="#" className="text-blue-500 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-blue-500 hover:underline">
+              Privacy Policy
             </a>
-          </div>
+            .
+          </p>
 
-          {/* Sign Up Link */}
+          {/* Login Link */}
           <p className="text-gray-400 mt-8">
-            New to Netflix?{" "}
-            <Link to="/signup" className="text-white hover:underline">
-              Sign up now
+            Already have an account?{" "}
+            <Link to="/login" className="text-white hover:underline">
+              Sign in now
             </Link>
           </p>
 
-          {/* Terms */}
+          {/* reCAPTCHA Notice */}
           <p className="text-xs text-gray-400 mt-4">
             This page is protected by Google reCAPTCHA to ensure you're not a bot.{" "}
             <a href="#" className="text-blue-500 hover:underline">
@@ -92,4 +112,5 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
+

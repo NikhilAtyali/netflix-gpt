@@ -103,6 +103,8 @@ npm run lint     # Run ESLint
 
 - **[Quick Start Guide](QUICK_START.md)** - Get started in 5 minutes
 - **[API Setup Guide](API_SETUP_GUIDE.md)** - Complete TMDB API documentation
+- **[Feature Roadmap](FEATURES_TODO.md)** - Comprehensive feature list (40+ features)
+- **[Feature Checklist](FEATURE_CHECKLIST.md)** - Quick priority checklist
 
 ## 🎬 API Features
 

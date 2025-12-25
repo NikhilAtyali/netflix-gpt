@@ -1,4 +1,5 @@
-import Header from "./Header";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 import MovieRow from "./MovieRow";
 import {
   getNowPlayingMovies,
@@ -10,7 +11,7 @@ import {
 const Browse = () => {
   return (
     <div className="bg-black min-h-screen">
-      <Header />
+      <Navbar />
       
       <div className="pt-20">
         {/* Hero Section - Can add a featured movie banner here later */}
@@ -31,6 +32,8 @@ const Browse = () => {
         <MovieRow title="Popular Movies" fetchFunction={getPopularMovies} />
         <MovieRow title="Top Rated" fetchFunction={getTopRatedMovies} />
       </div>
+
+      <Footer />
     </div>
   );
 };

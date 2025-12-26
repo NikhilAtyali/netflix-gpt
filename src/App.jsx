@@ -5,6 +5,7 @@ import Browse from './components/Browse';
 import MovieDetail from './components/MovieDetail';
 import SearchResults from './components/SearchResults';
 import GenrePage from './components/GenrePage';
+import MyList from './components/MyList';
 
 function App() {
 const appRouter = createBrowserRouter([
@@ -31,6 +32,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/genre/:genreId',
         element: <GenrePage />
+      },
+      {
+        path: '/mylist',
+        element: <MyList />
       }
 ])
 

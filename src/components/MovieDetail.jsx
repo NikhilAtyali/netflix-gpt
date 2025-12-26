@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { getMovieDetails } from "../utils/tmdbApi";
 import { getImageUrl } from "../utils/constants";
+import { addToMyList, removeFromMyList, selectIsInMyList } from "../store/myListSlice";
 import MovieList from "./MovieList";
 
 const MovieDetail = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [activeTab, setActiveTab] = useState("overview"); // overview, videos, similar
+  const isInMyList = useSelector((state) => 
+    movie ? selectIsInMyList(movie.id)(state) : false
+  );
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -37,7 +43,7 @@ const MovieDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-netflix-dark flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
@@ -45,7 +51,7 @@ const MovieDetail = () => {
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-netflix-dark flex items-center justify-center">
         <div className="text-white text-xl">{error || "Movie not found"}</div>
       </div>
     );
@@ -84,12 +90,20 @@ const MovieDetail = () => {
     (person) => person.job === "Writer" || person.job === "Screenplay"
   ) || [];
 
+  const handleMyListToggle = () => {
+    if (isInMyList) {
+      dispatch(removeFromMyList(movie.id));
+    } else {
+      dispatch(addToMyList(movie));
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-netflix-dark text-white">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="fixed top-4 left-4 z-50 bg-black/50 hover:bg-black/80 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+        className="fixed top-4 left-4 z-50 bg-netflix-dark-lighter/90 hover:bg-netflix-dark-card text-white p-3 rounded-full backdrop-blur-sm transition-all"
         aria-label="Go back"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,11 +173,23 @@ const MovieDetail = () => {
                 Play
               </button>
 
-              {/* Add to List */}
-              <button className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+              {/* Add to List / Remove from List */}
+              <button 
+                onClick={handleMyListToggle}
+                className={`w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white/20 transition-colors ${
+                  isInMyList ? "bg-white" : ""
+                }`}
+                title={isInMyList ? "Remove from My List" : "Add to My List"}
+              >
+                {isInMyList ? (
+                  <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                )}
               </button>
 
               {/* Like */}

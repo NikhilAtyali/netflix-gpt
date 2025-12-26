@@ -69,7 +69,7 @@ const MovieRow = ({ title, fetchFunction }) => {
         {/* Left Scroll Button */}
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-0 bottom-0 z-20 w-12 bg-black/50 hover:bg-black/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          className="absolute left-0 top-0 bottom-0 z-20 w-12 bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
           aria-label="Scroll left"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +90,7 @@ const MovieRow = ({ title, fetchFunction }) => {
         {/* Right Scroll Button */}
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-0 bottom-0 z-20 w-12 bg-black/50 hover:bg-black/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          className="absolute right-0 top-0 bottom-0 z-20 w-12 bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
           aria-label="Scroll right"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

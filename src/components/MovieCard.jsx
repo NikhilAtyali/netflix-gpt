@@ -1,14 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { getImageUrl } from "../utils/constants";
+import { addToMyList, removeFromMyList, selectIsInMyList } from "../store/myListSlice";
 
 const MovieCard = ({ movie }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isInMyList = useSelector(selectIsInMyList(movie.id));
 
   const handleCardClick = () => {
     navigate(`/watch/${movie.id}`);
+  };
+
+  const handleMyListToggle = (e) => {
+    e.stopPropagation();
+    if (isInMyList) {
+      dispatch(removeFromMyList(movie.id));
+    } else {
+      dispatch(addToMyList(movie));
+    }
   };
 
   return (
@@ -81,18 +94,24 @@ const MovieCard = ({ movie }) => {
                 </svg>
               </button>
 
-              {/* Add to List */}
+              {/* Add to List / Remove from List */}
               <button
-                className="w-7 h-7 border-2 border-white rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                aria-label="Add to list"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("Add to list:", movie.id);
-                }}
+                className={`w-7 h-7 border-2 border-white rounded-full flex items-center justify-center hover:bg-white/20 transition-colors ${
+                  isInMyList ? "bg-white" : ""
+                }`}
+                aria-label={isInMyList ? "Remove from list" : "Add to list"}
+                onClick={handleMyListToggle}
+                title={isInMyList ? "Remove from My List" : "Add to My List"}
               >
-                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+                {isInMyList ? (
+                  <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                ) : (
+                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                )}
               </button>
 
               {/* Like */}

@@ -60,7 +60,7 @@ const GenrePage = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-netflix-dark min-h-screen">
       <Navbar />
 
       <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">

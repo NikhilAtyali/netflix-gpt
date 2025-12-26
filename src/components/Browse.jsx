@@ -11,7 +11,7 @@ import {
 
 const Browse = () => {
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-netflix-dark min-h-screen">
       <Navbar />
       
       {/* Hero Banner Section */}

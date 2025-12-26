@@ -19,14 +19,14 @@ const Signup = () => {
           alt="background"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="absolute inset-0 bg-opacity-60" style={{ backgroundColor: 'rgb(9 12 19)' }} />
       </div>
 
       {/* Signup Form */}
       <div className="relative flex items-center justify-center min-h-screen">
         <form
           onSubmit={handleSignup}
-          className="w-full max-w-md mx-4 p-12 bg-black bg-opacity-75 rounded-md"
+          className="w-full max-w-md mx-4 p-12 bg-netflix-dark bg-opacity-95 rounded-md backdrop-blur-sm"
         >
           <h1 className="text-white font-bold text-3xl mb-6">Sign Up</h1>
 

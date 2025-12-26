@@ -33,8 +33,12 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-black" : "bg-gradient-to-b from-black to-transparent"
+        isScrolled ? "backdrop-blur-sm" : "bg-gradient-to-b to-transparent"
       }`}
+      style={{
+        backgroundColor: isScrolled ? 'rgba(9, 12, 19, 0.95)' : undefined,
+        backgroundImage: !isScrolled ? 'linear-gradient(to bottom, rgb(9 12 19), transparent)' : undefined
+      }}
     >
       <div className="flex items-center justify-between px-8 py-4">
         {/* Left Section - Logo & Navigation */}
@@ -70,29 +74,29 @@ const Navbar = () => {
               
               {/* Dropdown Menu */}
               <div className="hidden group-hover:block absolute top-full left-0 pt-2 z-50">
-                <div className="bg-black bg-opacity-95 border border-gray-700 rounded-md py-2 w-48">
-                <Link to="/genre/28" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <div className="bg-netflix-dark-card bg-opacity-98 border border-gray-600 rounded-md py-2 w-48 shadow-xl">
+                <Link to="/genre/28" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Action
                 </Link>
-                <Link to="/genre/35" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/35" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Comedy
                 </Link>
-                <Link to="/genre/18" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/18" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Drama
                 </Link>
-                <Link to="/genre/27" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/27" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Horror
                 </Link>
-                <Link to="/genre/10749" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/10749" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Romance
                 </Link>
-                <Link to="/genre/878" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/878" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Sci-Fi
                 </Link>
-                <Link to="/genre/53" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/53" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Thriller
                 </Link>
-                <Link to="/genre/16" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                <Link to="/genre/16" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">
                   Animation
                 </Link>
                 </div>
@@ -123,7 +127,7 @@ const Navbar = () => {
           {/* Search */}
           <div className="relative">
             <div className={`flex items-center transition-all duration-300 ${
-              searchOpen ? "w-64 bg-black border border-white" : "w-auto"
+              searchOpen ? "w-64 bg-netflix-dark-lighter border border-gray-600" : "w-auto"
             }`}>
               {searchOpen && (
                 <form onSubmit={handleSearch} className="flex-1">

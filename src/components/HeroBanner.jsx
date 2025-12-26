@@ -56,7 +56,7 @@ const HeroBanner = () => {
         />
         
         {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-netflix-dark via-netflix-dark/80 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
       </div>

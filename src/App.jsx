@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Browse from './components/Browse';
 import MovieDetail from './components/MovieDetail';
+import SearchResults from './components/SearchResults';
 
 function App() {
 const appRouter = createBrowserRouter([
@@ -21,6 +22,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/watch/:movieId',
         element: <MovieDetail />
+      },
+      {
+        path: '/search',
+        element: <SearchResults />
       }
 ])
 

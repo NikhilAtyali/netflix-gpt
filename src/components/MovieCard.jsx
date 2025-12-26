@@ -1,12 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { getImageUrl } from "../utils/constants";
 
 const MovieCard = ({ movie }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/watch/${movie.id}`);
+  };
 
   return (
-    <div className="relative flex-shrink-0 w-[250px] md:w-[300px] cursor-pointer group/card transition-all duration-300 hover:scale-110 hover:z-50 z-10">
+    <div 
+      className="relative flex-shrink-0 w-[250px] md:w-[300px] cursor-pointer group/card transition-all duration-300 hover:scale-110 hover:z-50 z-10"
+      onClick={handleCardClick}
+    >
       {/* Main Card */}
       <div className="relative rounded-md overflow-hidden shadow-lg group-hover/card:shadow-2xl">
         {/* Movie Image */}
@@ -106,7 +115,7 @@ const MovieCard = ({ movie }) => {
                 aria-label="More info"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("More info:", movie.id);
+                  navigate(`/watch/${movie.id}`);
                 }}
               >
                 <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

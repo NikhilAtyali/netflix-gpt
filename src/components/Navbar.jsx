@@ -58,22 +58,47 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                to="/tv-shows"
-                className="text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                TV Shows
-              </Link>
+            
+            {/* Genres Dropdown */}
+            <li className="relative group">
+              <button className="text-gray-400 hover:text-gray-300 transition-colors flex items-center gap-1">
+                Genres
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {/* Dropdown Menu */}
+              <div className="hidden group-hover:block absolute top-full left-0 pt-2 z-50">
+                <div className="bg-black bg-opacity-95 border border-gray-700 rounded-md py-2 w-48">
+                <Link to="/genre/28" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Action
+                </Link>
+                <Link to="/genre/35" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Comedy
+                </Link>
+                <Link to="/genre/18" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Drama
+                </Link>
+                <Link to="/genre/27" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Horror
+                </Link>
+                <Link to="/genre/10749" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Romance
+                </Link>
+                <Link to="/genre/878" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Sci-Fi
+                </Link>
+                <Link to="/genre/53" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Thriller
+                </Link>
+                <Link to="/genre/16" className="block px-4 py-2 text-sm text-white hover:bg-gray-800">
+                  Animation
+                </Link>
+                </div>
+              </div>
             </li>
-            <li>
-              <Link
-                to="/movies"
-                className="text-gray-400 hover:text-gray-300 transition-colors"
-              >
-                Movies
-              </Link>
-            </li>
+            
             <li>
               <Link
                 to="/new"

@@ -4,6 +4,7 @@ import Signup from './components/Signup';
 import Browse from './components/Browse';
 import MovieDetail from './components/MovieDetail';
 import SearchResults from './components/SearchResults';
+import GenrePage from './components/GenrePage';
 
 function App() {
 const appRouter = createBrowserRouter([
@@ -26,6 +27,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/search',
         element: <SearchResults />
+      },
+      {
+        path: '/genre/:genreId',
+        element: <GenrePage />
       }
 ])
 

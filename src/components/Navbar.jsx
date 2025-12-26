@@ -216,7 +216,7 @@ const Navbar = () => {
             </svg>
 
             {/* Dropdown Menu (Hidden by default) */}
-            <div className="hidden group-hover:block absolute top-14 right-8 bg-black bg-opacity-90 border border-gray-700 rounded-sm py-2 w-48">
+            <div className="hidden group-hover:block absolute top-[52px] right-8 bg-black bg-opacity-90 border border-gray-700 rounded-sm py-2 w-48">
               <Link
                 to="/account"
                 className="block px-4 py-2 text-sm text-white hover:underline"

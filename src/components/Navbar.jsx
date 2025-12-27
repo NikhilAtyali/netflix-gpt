@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { selectUser } from "../store/userSlice";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   // Change navbar background on scroll
   useEffect(() => {
@@ -27,6 +32,15 @@ const Navbar = () => {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
       setSearchOpen(false);
       setSearchQuery("");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
@@ -217,6 +231,16 @@ const Navbar = () => {
 
             {/* Dropdown Menu (Hidden by default) */}
             <div className="hidden group-hover:block absolute top-[52px] right-8 bg-black bg-opacity-90 border border-gray-700 rounded-sm py-2 w-48">
+              {/* User Info */}
+              {user && (
+                <>
+                  <div className="px-4 py-2 text-sm">
+                    <p className="text-white font-semibold">{user.displayName || "User"}</p>
+                    <p className="text-gray-400 text-xs truncate">{user.email}</p>
+                  </div>
+                  <hr className="border-gray-700 my-2" />
+                </>
+              )}
               <Link
                 to="/account"
                 className="block px-4 py-2 text-sm text-white hover:underline"
@@ -230,12 +254,12 @@ const Navbar = () => {
                 Settings
               </Link>
               <hr className="border-gray-700 my-2" />
-              <Link
-                to="/login"
-                className="block px-4 py-2 text-sm text-white hover:underline"
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 text-sm text-white hover:underline"
               >
                 Sign Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>

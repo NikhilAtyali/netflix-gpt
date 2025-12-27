@@ -1,45 +1,60 @@
 import { useState, useEffect } from "react";
-import { getNowPlayingMovies } from "../utils/tmdbApi";
+import { useNavigate } from "react-router-dom";
+import { getTrendingMovies } from "../utils/tmdbApi";
 import { getImageUrl } from "../utils/constants";
+import { Play, Info } from "lucide-react";
 
 const HeroBanner = () => {
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchFeaturedMovie = async () => {
-      try {
-        const data = await getNowPlayingMovies();
-        // Get a random movie from the first 5 results for variety
-        const randomIndex = Math.floor(Math.random() * Math.min(5, data.results.length));
-        setFeaturedMovie(data.results[randomIndex]);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching featured movie:", error);
-        setLoading(false);
-      }
-    };
-
     fetchFeaturedMovie();
   }, []);
 
-  // Truncate long descriptions
-  const truncateText = (text, maxLength = 200) => {
-    if (!text) return "";
-    if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + "...";
+  const fetchFeaturedMovie = async () => {
+    try {
+      setLoading(true);
+      const data = await getTrendingMovies();
+      
+      if (data?.results && data.results.length > 0) {
+        // Pick a random movie from the first 5 trending movies
+        const randomIndex = Math.floor(Math.random() * Math.min(5, data.results.length));
+        setFeaturedMovie(data.results[randomIndex]);
+      }
+    } catch (error) {
+      console.error("Error fetching featured movie:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (loading) {
+  const handlePlay = () => {
+    if (featuredMovie) {
+      navigate(`/watch/${featuredMovie.id}`);
+    }
+  };
+
+  const handleMoreInfo = () => {
+    if (featuredMovie) {
+      navigate(`/watch/${featuredMovie.id}`);
+    }
+  };
+
+  // Truncate overview to a specific length
+  const truncateText = (text, maxLength) => {
+    if (!text) return "";
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength).trim() + "...";
+  };
+
+  if (loading || !featuredMovie) {
     return (
-      <div className="relative h-[80vh] bg-gray-900 animate-pulse">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
+      <div className="relative h-[80vh] bg-netflix-dark animate-pulse">
+        <div className="absolute inset-0 bg-gradient-to-t from-netflix-dark via-transparent to-transparent" />
       </div>
     );
-  }
-
-  if (!featuredMovie) {
-    return null;
   }
 
   return (
@@ -48,35 +63,33 @@ const HeroBanner = () => {
       <div className="absolute inset-0">
         <img
           src={getImageUrl(featuredMovie.backdrop_path, "original", "backdrop")}
-          alt={featuredMovie.title}
+          alt={featuredMovie.title || featuredMovie.name}
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "https://via.placeholder.com/1920x1080?text=Netflix+GPT";
-          }}
+          loading="eager"
         />
         
         {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-netflix-dark via-netflix-dark/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-netflix-dark via-netflix-dark/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-netflix-dark via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-netflix-dark to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center px-8 md:px-16 lg:px-20">
+      <div className="relative h-full flex items-center px-8 md:px-16 lg:px-24">
         <div className="max-w-2xl space-y-4 md:space-y-6">
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">
             {featuredMovie.title || featuredMovie.name}
           </h1>
 
-          {/* Movie Info */}
+          {/* Metadata */}
           <div className="flex items-center space-x-4 text-sm md:text-base">
-            {featuredMovie.vote_average && (
+            {featuredMovie.vote_average > 0 && (
               <div className="flex items-center space-x-1">
-                <span className="text-green-400 font-bold">
+                <span className="text-yellow-400 text-lg">★</span>
+                <span className="text-white font-semibold">
                   {featuredMovie.vote_average.toFixed(1)}
                 </span>
-                <span className="text-yellow-400">★</span>
               </div>
             )}
             {featuredMovie.release_date && (
@@ -85,89 +98,82 @@ const HeroBanner = () => {
               </span>
             )}
             {featuredMovie.adult !== undefined && (
-              <span className="px-2 py-0.5 border border-gray-400 text-gray-300 text-xs rounded">
+              <span className="border border-gray-400 text-gray-300 px-2 py-0.5 text-xs">
                 {featuredMovie.adult ? "18+" : "PG-13"}
               </span>
             )}
           </div>
 
-          {/* Description */}
-          <p className="text-base md:text-lg text-gray-200 leading-relaxed drop-shadow-md">
+          {/* Overview */}
+          <p className="text-white text-sm md:text-base lg:text-lg leading-relaxed drop-shadow-md max-w-xl">
             {truncateText(featuredMovie.overview, 200)}
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          {/* Buttons */}
+          <div className="flex items-center space-x-3 pt-2">
             {/* Play Button */}
-            <button className="flex items-center space-x-2 px-8 py-3 bg-white hover:bg-gray-200 text-black font-semibold rounded transition-colors shadow-lg">
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span>Play</span>
+            <button
+              onClick={handlePlay}
+              className="flex items-center space-x-2 bg-white text-black px-6 py-2.5 md:px-8 md:py-3 rounded-md font-semibold hover:bg-gray-200 transition-colors shadow-lg"
+            >
+              <Play className="w-5 h-5 md:w-6 md:h-6 fill-current" />
+              <span className="text-sm md:text-base">Play</span>
             </button>
 
             {/* More Info Button */}
-            <button className="flex items-center space-x-2 px-8 py-3 bg-gray-500/70 hover:bg-gray-500/50 text-white font-semibold rounded transition-colors backdrop-blur-sm">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>More Info</span>
+            <button
+              onClick={handleMoreInfo}
+              className="flex items-center space-x-2 bg-gray-600/80 text-white px-6 py-2.5 md:px-8 md:py-3 rounded-md font-semibold hover:bg-gray-600/60 transition-colors backdrop-blur-sm shadow-lg"
+            >
+              <Info className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-sm md:text-base">More Info</span>
             </button>
           </div>
 
-          {/* Genres (Optional) */}
+          {/* Genres (if available) */}
           {featuredMovie.genre_ids && featuredMovie.genre_ids.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
-              <span className="text-gray-400 text-sm">Genres:</span>
-              {/* You can map genre IDs to names here if you have genre data */}
-              <span className="text-gray-300 text-sm">
-                Action • Adventure • Thriller
-              </span>
+              {featuredMovie.genre_ids.slice(0, 3).map((genreId) => {
+                const genreNames = {
+                  28: "Action",
+                  12: "Adventure",
+                  16: "Animation",
+                  35: "Comedy",
+                  80: "Crime",
+                  99: "Documentary",
+                  18: "Drama",
+                  10751: "Family",
+                  14: "Fantasy",
+                  36: "History",
+                  27: "Horror",
+                  10402: "Music",
+                  9648: "Mystery",
+                  10749: "Romance",
+                  878: "Sci-Fi",
+                  10770: "TV Movie",
+                  53: "Thriller",
+                  10752: "War",
+                  37: "Western",
+                };
+                
+                return (
+                  <span
+                    key={genreId}
+                    className="text-xs md:text-sm text-gray-300 bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm"
+                  >
+                    {genreNames[genreId] || "Other"}
+                  </span>
+                );
+              })}
             </div>
           )}
         </div>
       </div>
 
-      {/* Age Rating Badge (Bottom Right) */}
-      <div className="absolute bottom-8 right-8 px-3 py-1 border-l-4 border-white bg-black/70 backdrop-blur-sm">
-        <span className="text-white text-xs font-bold">
-          {featuredMovie.adult ? "18+" : "13+"}
-        </span>
-      </div>
-
-      {/* Mute Button (for future trailer auto-play) */}
-      <button className="absolute bottom-8 right-24 p-2 bg-black/50 hover:bg-black/70 rounded-full border border-white/50 transition-colors">
-        <svg
-          className="w-6 h-6 text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-          />
-        </svg>
-      </button>
+      {/* Fade to Content Below */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-netflix-dark to-transparent pointer-events-none" />
     </div>
   );
 };
 
 export default HeroBanner;
-

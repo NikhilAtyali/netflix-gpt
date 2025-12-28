@@ -4,14 +4,24 @@ import { useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { selectUser } from "../store/userSlice";
-
+import useDebounce from "../hooks/useDebounce";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-
+  const debouncedSearch = useDebounce(searchQuery, 300);
+  
+  useEffect(() => {
+    if (debouncedSearch.length >= 3) {
+      // Only navigate if query is different from current
+      const currentQuery = new URLSearchParams(window.location.search).get('q');
+      if (currentQuery !== debouncedSearch) {
+        navigate(`/search?q=${encodeURIComponent(debouncedSearch)}`);
+      }
+    }
+  }, [debouncedSearch, navigate])
   // Change navbar background on scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +38,8 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
+    // Allow immediate search on Enter key (bypasses debounce)
+    if (searchQuery.trim() && searchQuery.length >= 3) {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
       setSearchOpen(false);
       setSearchQuery("");

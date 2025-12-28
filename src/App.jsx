@@ -1,16 +1,23 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Browse from './components/Browse';
-import MovieDetail from './components/MovieDetail';
-import SearchResults from './components/SearchResults';
-import GenrePage from './components/GenrePage';
-import MyList from './components/MyList';
-import ProtectedRoute from './components/ProtectedRoute';
+const Login = lazy(()=> import('./components/Login'))
+const Signup = lazy(()=> import('./components/Signup'))
+const Browse = lazy(()=> import('./components/Browse'))
+const MovieDetail = lazy(()=> import('./components/MovieDetail'))
+const SearchResults = lazy(()=> import('./components/SearchResults'))
+const GenrePage = lazy(()=> import('./components/GenrePage'))
+const MyList = lazy(()=> import('./components/MyList'))
+const ProtectedRoute = lazy(()=> import('./components/ProtectedRoute'))
 import useAuth from './hooks/useAuth';
 import { selectUser } from './store/userSlice';
 
+// Loading component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen bg-netflix-dark">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600"></div>
+  </div>
+);
 function App() {
   // Initialize auth listener (listens to Firebase auth changes)
   useAuth();
@@ -54,9 +61,9 @@ const appRouter = createBrowserRouter([
 ])
 
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
      <RouterProvider router={appRouter} />
-    </>
+    </Suspense>
   )
 }
 

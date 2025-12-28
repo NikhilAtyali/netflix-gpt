@@ -1,28 +1,31 @@
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { getImageUrl } from "../utils/constants";
 import { addToMyList, removeFromMyList, selectIsInMyList } from "../store/myListSlice";
 
-const MovieCard = ({ movie }) => {
+const MovieCard = memo(({ movie }) => {
+  // 🔍 DEBUG: Track re-renders (remove after testing)
+  console.log(`🎬 MovieCard rendered: ${movie.title}`);
+  
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isInMyList = useSelector(selectIsInMyList(movie.id));
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     navigate(`/watch/${movie.id}`);
-  };
+  }, [navigate, movie.id]);
 
-  const handleMyListToggle = (e) => {
+  const handleMyListToggle = useCallback((e) => {
     e.stopPropagation();
     if (isInMyList) {
       dispatch(removeFromMyList(movie.id));
     } else {
       dispatch(addToMyList(movie));
     }
-  };
+  }, [isInMyList, dispatch, movie]);
 
   return (
     <div 
@@ -39,6 +42,8 @@ const MovieCard = ({ movie }) => {
             className={`w-full h-full object-cover transition-opacity duration-300 ${
               imageLoaded ? "opacity-100" : "opacity-0"
             }`}
+            loading="lazy"
+            decoding="async"
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
               e.target.src = "https://via.placeholder.com/300x169?text=No+Image";
@@ -147,7 +152,9 @@ const MovieCard = ({ movie }) => {
       </div>
     </div>
   );
-};
+});
+
+MovieCard.displayName = 'MovieCard';
 
 MovieCard.propTypes = {
   movie: PropTypes.shape({

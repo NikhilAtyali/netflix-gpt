@@ -13,6 +13,7 @@ jest.mock('../../utils/firebase', () => ({
 jest.mock('firebase/auth', () => ({
   signInWithEmailAndPassword: jest.fn(),
   signInWithPopup: jest.fn(),
+  signInAnonymously: jest.fn(),
   GoogleAuthProvider: jest.fn(),
 }));
 
@@ -98,6 +99,21 @@ describe('Login Component', () => {
       
       // Check button has Google text
       expect(googleButton).toHaveTextContent(/sign in with google/i);
+    });
+
+    it('should render guest login button', () => {
+      renderWithProviders(<Login />);
+      
+      const guestButton = screen.getByRole('button', { name: /continue as guest/i });
+      
+      // Check button exists
+      expect(guestButton).toBeInTheDocument();
+      
+      // Check button type is button (not submit)
+      expect(guestButton).toHaveAttribute('type', 'button');
+      
+      // Check button has correct text
+      expect(guestButton).toHaveTextContent(/continue as guest/i);
     });
 
     it('should render link to signup page', () => {
@@ -369,6 +385,95 @@ describe('Login Component', () => {
       await waitFor(() => {
         expect(screen.getByText(/sign-in popup was closed/i)).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Guest Login', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should successfully login as guest with demo account', async () => {
+      const { signInWithEmailAndPassword } = require('firebase/auth');
+      signInWithEmailAndPassword.mockResolvedValue({ user: mockUser });
+      
+      renderWithProviders(<Login />);
+      
+      const guestButton = screen.getByRole('button', { name: /continue as guest/i });
+      
+      // Click guest login
+      fireEvent.click(guestButton);
+      
+      // Verify guest credentials were used
+      await waitFor(() => {
+        expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
+          expect.anything(),
+          'guest@netflixgpt.com',
+          'Guest@123'
+        );
+      });
+    });
+
+    it('should fallback to anonymous login if guest account does not exist', async () => {
+      const { signInWithEmailAndPassword, signInAnonymously } = require('firebase/auth');
+      signInWithEmailAndPassword.mockRejectedValue({ 
+        code: 'auth/user-not-found' 
+      });
+      signInAnonymously.mockResolvedValue({ user: mockUser });
+      
+      renderWithProviders(<Login />);
+      
+      const guestButton = screen.getByRole('button', { name: /continue as guest/i });
+      
+      // Click guest login
+      fireEvent.click(guestButton);
+      
+      // Verify anonymous login was used as fallback
+      await waitFor(() => {
+        expect(signInAnonymously).toHaveBeenCalled();
+      });
+    });
+
+    it('should show error message on guest login failure', async () => {
+      const { signInWithEmailAndPassword, signInAnonymously } = require('firebase/auth');
+      signInWithEmailAndPassword.mockRejectedValue({ 
+        code: 'auth/network-request-failed' 
+      });
+      
+      renderWithProviders(<Login />);
+      
+      const guestButton = screen.getByRole('button', { name: /continue as guest/i });
+      
+      // Click guest login
+      fireEvent.click(guestButton);
+      
+      // Wait for error message
+      await waitFor(() => {
+        expect(screen.getByText(/unable to login as guest/i)).toBeInTheDocument();
+      });
+    });
+
+    it('should show loading state during guest login', async () => {
+      const { signInWithEmailAndPassword } = require('firebase/auth');
+      let resolveLogin;
+      signInWithEmailAndPassword.mockReturnValue(
+        new Promise((resolve) => { resolveLogin = resolve; })
+      );
+      
+      renderWithProviders(<Login />);
+      
+      const guestButton = screen.getByRole('button', { name: /continue as guest/i });
+      
+      // Click guest login
+      fireEvent.click(guestButton);
+      
+      // Check button is disabled during loading
+      await waitFor(() => {
+        expect(guestButton).toBeDisabled();
+      });
+      
+      // Resolve the promise
+      resolveLogin({ user: mockUser });
     });
   });
 

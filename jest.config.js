@@ -44,7 +44,7 @@ export default {
   ],
 
   // Coverage thresholds (optional - can be adjusted)
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,

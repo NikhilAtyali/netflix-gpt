@@ -65,15 +65,19 @@ const Navbar = () => {
         backgroundImage: !isScrolled ? 'linear-gradient(to bottom, rgb(9 12 19), transparent)' : undefined
       }}
     >
-      <div className="flex items-center justify-between px-8 py-4">
+      <div className="flex items-center justify-between px-4 md:px-6 py-3">
         {/* Left Section - Logo & Navigation */}
         <div className="flex items-center space-x-8">
           {/* Netflix Logo */}
           <Link to="/">
             <img
-              src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-              alt="Netflix"
-              className="h-8 w-auto cursor-pointer"
+              src="https://images.ctfassets.net/4cd45et68cgf/7LrExJ6PAj6MSIPkDyCO86/542b1dfabbf3959908f69be546879952/Netflix-Brand-Logo.png"
+              alt="NetflixGPT"
+              className="h-[5.5rem] w-auto cursor-pointer hover:scale-105 transition-transform duration-200"
+              style={{ height: '5.5rem' }}
+              onError={(e) => {
+                e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg';
+              }}
             />
           </Link>
 

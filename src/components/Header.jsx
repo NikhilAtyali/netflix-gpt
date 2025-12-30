@@ -2,11 +2,14 @@
 const Header = () => {
   return (
     <div className="absolute px-8 py-2 bg-gradient-to-b from-black z-10">
-    <img 
-    src='https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png'
-    alt='logo'
-    className="w-44"
-    />
+      <img 
+        src="https://images.ctfassets.net/4cd45et68cgf/7LrExJ6PAj6MSIPkDyCO86/542b1dfabbf3959908f69be546879952/Netflix-Brand-Logo.png"
+        alt="NetflixGPT"
+        className="w-44"
+        onError={(e) => {
+          e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg';
+        }}
+      />
     </div>
   )
 }

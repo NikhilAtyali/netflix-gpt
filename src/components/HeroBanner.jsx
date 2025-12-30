@@ -58,9 +58,9 @@ const HeroBanner = () => {
   }
 
   return (
-    <div className="relative h-[80vh] w-full">
+    <div className="relative h-[80vh] w-full pt-20">
       {/* Background Image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 top-0">
         <img
           src={getImageUrl(featuredMovie.backdrop_path, "original", "backdrop")}
           alt={featuredMovie.title || featuredMovie.name}
@@ -75,7 +75,7 @@ const HeroBanner = () => {
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center px-8 md:px-16 lg:px-24">
+      <div className="relative h-full flex items-center px-4 md:px-12 lg:px-20">
         <div className="max-w-2xl space-y-4 md:space-y-6">
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">

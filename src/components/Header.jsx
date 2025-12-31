@@ -1,7 +1,11 @@
+import { useSelector } from "react-redux";
+import { selectTheme } from "../store/themeSlice";
 
 const Header = () => {
+  const theme = useSelector(selectTheme);
+  
   return (
-    <div className="absolute px-8 py-2 bg-gradient-to-b from-black z-10">
+    <div className={`absolute px-8 py-2 bg-gradient-to-b ${theme === 'dark' ? 'from-black' : 'from-white'} z-10`}>
       <img 
         src="https://images.ctfassets.net/4cd45et68cgf/7LrExJ6PAj6MSIPkDyCO86/542b1dfabbf3959908f69be546879952/Netflix-Brand-Logo.png"
         alt="NetflixGPT"

@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { getTrendingMovies } from "../utils/tmdbApi";
 import { getImageUrl } from "../utils/constants";
 import { Play, Info } from "lucide-react";
+import { selectTheme } from "../store/themeSlice";
 
 const HeroBanner = () => {
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     fetchFeaturedMovie();
@@ -51,8 +54,8 @@ const HeroBanner = () => {
 
   if (loading || !featuredMovie) {
     return (
-      <div className="relative h-[80vh] bg-netflix-dark animate-pulse">
-        <div className="absolute inset-0 bg-gradient-to-t from-netflix-dark via-transparent to-transparent" />
+      <div className={`relative h-[80vh] ${theme === 'dark' ? 'bg-netflix-dark' : 'bg-light-bg'} animate-pulse`}>
+        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-netflix-dark' : 'from-light-bg'} via-transparent to-transparent`} />
       </div>
     );
   }
@@ -69,9 +72,9 @@ const HeroBanner = () => {
         />
         
         {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-netflix-dark via-netflix-dark/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-netflix-dark via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-netflix-dark to-transparent" />
+        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-netflix-dark via-netflix-dark/70' : 'from-light-bg via-light-bg/70'} to-transparent`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-netflix-dark' : 'from-light-bg'} via-transparent to-transparent`} />
+        <div className={`absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t ${theme === 'dark' ? 'from-netflix-dark' : 'from-light-bg'} to-transparent`} />
       </div>
 
       {/* Content */}
@@ -171,7 +174,7 @@ const HeroBanner = () => {
       </div>
 
       {/* Fade to Content Below */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-netflix-dark to-transparent pointer-events-none" />
+      <div className={`absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t ${theme === 'dark' ? 'from-netflix-dark' : 'from-light-bg'} to-transparent pointer-events-none`} />
     </div>
   );
 };

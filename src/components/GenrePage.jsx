@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { getMoviesByGenre } from "../utils/tmdbApi";
 import { getImageUrl } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { selectTheme } from "../store/themeSlice";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -34,6 +36,7 @@ const GenrePage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     const fetchGenreMovies = async () => {
@@ -60,16 +63,16 @@ const GenrePage = () => {
   };
 
   return (
-    <div className="bg-netflix-dark min-h-screen">
+    <div className={`${theme === 'dark' ? 'bg-netflix-dark' : 'bg-light-bg'} min-h-screen`}>
       <Navbar />
 
       <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Genre Header */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+          <h1 className={`text-4xl md:text-5xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>
             {genreName} Movies
           </h1>
-          <p className="text-gray-400">
+          <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             Explore popular {genreName.toLowerCase()} movies
           </p>
         </div>
@@ -77,17 +80,17 @@ const GenrePage = () => {
         {/* Loading State */}
         {loading && (
           <div className="flex justify-center items-center py-20">
-            <div className="text-white text-xl">Loading...</div>
+            <div className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} text-xl`}>Loading...</div>
           </div>
         )}
 
         {/* Empty State */}
         {!loading && movies.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20">
-            <h2 className="text-2xl font-bold text-white mb-2">
+            <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2`}>
               No movies found
             </h2>
-            <p className="text-gray-400">
+            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
               Try selecting a different genre
             </p>
           </div>

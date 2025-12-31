@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInAnonymously } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { validateLoginForm, getFirebaseErrorMessage } from "../utils/validation";
+import { selectTheme } from "../store/themeSlice";
 import Header from "./Header";
 
 // Guest credentials (demo account)
@@ -15,6 +17,7 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const theme = useSelector(selectTheme);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -90,21 +93,29 @@ const Login = () => {
       
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/aa9edac4-a0e6-4f12-896e-32c518daec62/web/IN-en-20241223-TRIFECTA-perspective_1502c512-be5f-4f14-b21a-e3d75fe159ab_large.jpg"
-          alt="background"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-opacity-60" style={{ backgroundColor: 'rgb(9 12 19)' }} />
+        {theme === 'dark' ? (
+          <>
+            <img
+              src="https://assets.nflxext.com/ffe/siteui/vlv3/aa9edac4-a0e6-4f12-896e-32c518daec62/web/IN-en-20241223-TRIFECTA-perspective_1502c512-be5f-4f14-b21a-e3d75fe159ab_large.jpg"
+              alt="background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-opacity-60" style={{ backgroundColor: 'rgb(9 12 19)' }} />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-gray-100" />
+        )}
       </div>
 
       {/* Login Form */}
       <div className="relative flex items-center justify-center min-h-screen">
         <form
           onSubmit={handleLogin}
-          className="w-full max-w-md mx-4 p-12 bg-netflix-dark bg-opacity-95 rounded-md backdrop-blur-sm"
+          className={`w-full max-w-md mx-4 p-12 rounded-md backdrop-blur-sm shadow-2xl ${
+            theme === 'dark' ? 'bg-netflix-dark bg-opacity-95' : 'bg-white bg-opacity-95'
+          }`}
         >
-          <h1 className="text-white font-bold text-3xl mb-6">Sign In</h1>
+          <h1 className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-bold text-3xl mb-6`}>Sign In</h1>
 
           {/* General Error */}
           {errors.general && (
@@ -120,7 +131,11 @@ const Login = () => {
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full p-4 bg-gray-700 text-white rounded-md outline-none focus:bg-gray-600 ${
+              className={`w-full p-4 ${
+                theme === 'dark' 
+                  ? 'bg-gray-700 text-white focus:bg-gray-600' 
+                  : 'bg-gray-100 text-gray-900 focus:bg-gray-200'
+              } rounded-md outline-none ${
                 errors.email ? "border-2 border-red-500" : ""
               }`}
             />
@@ -136,7 +151,11 @@ const Login = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full p-4 bg-gray-700 text-white rounded-md outline-none focus:bg-gray-600 ${
+              className={`w-full p-4 ${
+                theme === 'dark' 
+                  ? 'bg-gray-700 text-white focus:bg-gray-600' 
+                  : 'bg-gray-100 text-gray-900 focus:bg-gray-200'
+              } rounded-md outline-none ${
                 errors.password ? "border-2 border-red-500" : ""
               }`}
             />
@@ -158,9 +177,9 @@ const Login = () => {
 
           {/* Divider */}
           <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-gray-600"></div>
-            <span className="px-4 text-gray-400 text-sm">OR</span>
-            <div className="flex-1 border-t border-gray-600"></div>
+            <div className={`flex-1 border-t ${theme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+            <span className={`px-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} text-sm`}>OR</span>
+            <div className={`flex-1 border-t ${theme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
           </div>
 
           {/* Google Sign In */}
@@ -197,9 +216,9 @@ const Login = () => {
           </button>
 
           {/* Sign Up Link */}
-          <div className="text-gray-400 mt-6">
+          <div className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} mt-6`}>
             New to Netflix?{" "}
-            <Link to="/signup" className="text-white hover:underline">
+            <Link to="/signup" className={`${theme === 'dark' ? 'text-white' : 'text-blue-600'} hover:underline`}>
               Sign up now
             </Link>
           </div>

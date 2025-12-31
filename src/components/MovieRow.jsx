@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { getImageUrl } from "../utils/constants";
 import MovieCard from "./MovieCard";
+import { selectTheme } from "../store/themeSlice";
 
 const MovieRow = ({ title, fetchFunction }) => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const rowRef = useRef(null);
+  const theme = useSelector(selectTheme);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -44,12 +47,12 @@ const MovieRow = ({ title, fetchFunction }) => {
   if (loading) {
     return (
       <div className="mb-12 px-8">
-        <h2 className="text-white text-2xl font-bold mb-4">{title}</h2>
+        <h2 className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} text-2xl font-bold mb-4`}>{title}</h2>
         <div className="flex gap-2 overflow-hidden">
           {[...Array(6)].map((_, index) => (
             <div
               key={index}
-              className="min-w-[250px] md:min-w-[300px] h-[140px] md:h-[170px] bg-gray-800 animate-pulse rounded-md"
+              className={`min-w-[250px] md:min-w-[300px] h-[140px] md:h-[170px] ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-300'} animate-pulse rounded-md`}
             />
           ))}
         </div>
@@ -60,7 +63,7 @@ const MovieRow = ({ title, fetchFunction }) => {
   return (
     <div className="mb-8 group/row">
       {/* Title */}
-      <h2 className="text-white text-xl md:text-2xl font-bold mb-4 px-8">
+      <h2 className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} text-xl md:text-2xl font-bold mb-4 px-8`}>
         {title}
       </h2>
 
@@ -69,7 +72,7 @@ const MovieRow = ({ title, fetchFunction }) => {
         {/* Left Scroll Button */}
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-0 bottom-0 z-20 w-12 bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          className={`absolute left-0 top-0 bottom-0 z-20 w-12 ${theme === 'dark' ? 'bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white' : 'bg-light-bg/50 hover:bg-light-bg/80 text-gray-800'} opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center`}
           aria-label="Scroll left"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +93,7 @@ const MovieRow = ({ title, fetchFunction }) => {
         {/* Right Scroll Button */}
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-0 bottom-0 z-20 w-12 bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+          className={`absolute right-0 top-0 bottom-0 z-20 w-12 ${theme === 'dark' ? 'bg-netflix-dark/50 hover:bg-netflix-dark/80 text-white' : 'bg-light-bg/50 hover:bg-light-bg/80 text-gray-800'} opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-center`}
           aria-label="Scroll right"
         >
           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMovieDetails } from "../utils/tmdbApi";
 import { getImageUrl } from "../utils/constants";
 import { addToMyList, removeFromMyList, selectIsInMyList } from "../store/myListSlice";
+import { selectTheme } from "../store/themeSlice";
 import MovieList from "./MovieList";
 
 const MovieDetail = () => {
@@ -15,6 +16,7 @@ const MovieDetail = () => {
   const [error, setError] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [activeTab, setActiveTab] = useState("overview"); // overview, videos, similar
+  const theme = useSelector(selectTheme);
   const isInMyList = useSelector((state) => 
     movie ? selectIsInMyList(movie.id)(state) : false
   );
@@ -43,16 +45,16 @@ const MovieDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-netflix-dark flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className={`min-h-screen ${theme === 'dark' ? 'bg-netflix-dark' : 'bg-light-bg'} flex items-center justify-center`}>
+        <div className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} text-xl`}>Loading...</div>
       </div>
     );
   }
 
   if (error || !movie) {
     return (
-      <div className="min-h-screen bg-netflix-dark flex items-center justify-center">
-        <div className="text-white text-xl">{error || "Movie not found"}</div>
+      <div className={`min-h-screen ${theme === 'dark' ? 'bg-netflix-dark' : 'bg-light-bg'} flex items-center justify-center`}>
+        <div className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} text-xl`}>{error || "Movie not found"}</div>
       </div>
     );
   }

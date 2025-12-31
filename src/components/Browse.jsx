@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import HeroBanner from "./HeroBanner";
@@ -8,10 +9,13 @@ import {
   getTopRatedMovies,
   getTrendingMovies,
 } from "../utils/tmdbApi";
+import { selectTheme } from "../store/themeSlice";
 
 const Browse = () => {
+  const theme = useSelector(selectTheme);
+  
   return (
-    <div className="bg-netflix-dark min-h-screen">
+    <div className={`${theme === 'dark' ? 'bg-netflix-dark' : 'bg-light-bg'} min-h-screen transition-colors duration-300`}>
       <Navbar />
       
       {/* Hero Banner Section */}

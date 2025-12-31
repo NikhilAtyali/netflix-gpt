@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    // Jest Testing
+    "firsttris.vscode-jest-runner",
+    "orta.vscode-jest",
+    
+    // Essential Development
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    
+    // React Development
+    "dsznajder.es7-react-js-snippets",
+    
+    // Git
+    "eamodio.gitlens",
+    
+    // Code Quality
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
+

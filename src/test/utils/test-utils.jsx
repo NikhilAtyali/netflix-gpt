@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../../store/userSlice';
 import myListReducer from '../../store/myListSlice';
+import themeReducer from '../../store/themeSlice';
 
 /**
  * Custom render function that wraps components with necessary providers
@@ -21,6 +22,7 @@ export function renderWithProviders(
       reducer: {
         user: userReducer,
         myList: myListReducer,
+        theme: themeReducer,
       },
       preloadedState,
     }),
@@ -47,6 +49,7 @@ export function createMockStore(initialState = {}) {
     reducer: {
       user: userReducer,
       myList: myListReducer,
+      theme: themeReducer,
     },
     preloadedState: initialState,
   });
